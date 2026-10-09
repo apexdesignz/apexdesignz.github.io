@@ -1045,11 +1045,163 @@ footer {
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   transform: translateY(22px) scale(.98);
-  transition: transform .4s cubic-bezier(.2,.8,.2,1);
+  transition: transform .4s cubic-bezier(.2,.8,.2,1), width .65s cubic-bezier(.2,.8,.2,1), height .65s cubic-bezier(.2,.8,.2,1), max-height .65s cubic-bezier(.2,.8,.2,1), border-radius .65s ease;
 }
 
 .project-modal.open .modal-panel {
   transform: translateY(0) scale(1);
+}
+
+/* HYBRID HOLOGRAPHIC -> CINEMATIC PROJECT SHOWCASE */
+.project-modal {
+  perspective: 1600px;
+  padding: 18px;
+}
+
+.project-modal:not(.cinematic) .modal-panel {
+  width: min(590px, calc(100vw - 30px));
+  max-height: min(76vh, 720px);
+  overflow: hidden;
+  border-color: rgba(220,174,69,.58);
+  border-radius: 18px;
+  box-shadow: 0 0 0 1px rgba(220,174,69,.08),
+              0 0 45px rgba(220,174,69,.18),
+              0 35px 120px rgba(0,0,0,.78),
+              inset 0 0 35px rgba(220,174,69,.035);
+  transform: translateY(26px) rotateX(7deg) scale(.82);
+}
+
+.project-modal.open:not(.cinematic) .modal-panel {
+  transform: translateY(0) rotateX(0) scale(1);
+}
+
+.project-modal:not(.cinematic) .modal-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  opacity: .35;
+  background: repeating-linear-gradient(180deg,
+    transparent 0, transparent 5px,
+    rgba(220,174,69,.055) 6px, transparent 7px);
+}
+
+.project-modal:not(.cinematic) .modal-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  margin: 0;
+}
+
+.project-modal.cinematic {
+  padding: 0;
+}
+
+.project-modal.cinematic .modal-panel {
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  max-height: 100vh;
+  max-height: 100dvh;
+  border-radius: 0;
+  border-left: 0;
+  border-right: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  transform: translateY(0) scale(1);
+  box-shadow: 0 0 100px rgba(220,174,69,.10);
+}
+
+.project-modal.cinematic .modal-inner {
+  width: min(1240px, 100%);
+  margin-inline: auto;
+  padding-top: clamp(30px, 5vh, 58px);
+  padding-bottom: 60px;
+}
+
+.project-modal.cinematic .modal-hero {
+  animation: showcaseReveal .65s both;
+}
+
+@keyframes showcaseReveal {
+  from { opacity: .25; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.modal-cover {
+  border: 1px solid rgba(255,255,255,.28);
+  box-shadow: 0 20px 55px rgba(0,0,0,.3),
+              0 0 38px rgba(220,174,69,.14);
+  transition: background .35s, color .35s, box-shadow .35s;
+}
+
+.modal-cover::marker { content: ""; }
+.modal-cover::before { box-shadow: 0 0 38px rgba(255,255,255,.12); }
+.modal-cover::after {
+  pointer-events: none;
+  background: linear-gradient(115deg, transparent 35%, rgba(255,255,255,.14) 48%, transparent 61%);
+  transform: translateX(-120%);
+  animation: hologramSweep 5.5s ease-in-out infinite;
+}
+
+@keyframes hologramSweep {
+  0%, 50% { transform: translateX(-120%); }
+  75%, 100% { transform: translateX(120%); }
+}
+
+.project-modal[data-project-theme="digital"] .modal-cover {
+  color: #e9e5d8;
+  background: radial-gradient(circle at 50% 40%, rgba(220,174,69,.2), transparent 42%), linear-gradient(145deg,#22251f,#080908 78%);
+}
+.project-modal[data-project-theme="campaign"] .modal-cover {
+  color: #f3ead5;
+  background: radial-gradient(circle at 70% 30%,rgba(220,174,69,.18),transparent 38%),linear-gradient(145deg,#1d1a14,#050505 75%);
+}
+.project-modal[data-project-theme="logo"] .modal-cover {
+  color: #282318;
+  background: radial-gradient(circle at 50% 45%,rgba(255,255,255,.65),transparent 36%),linear-gradient(145deg,#eadfca,#b9a37a);
+}
+.project-modal[data-project-theme="packaging"] .modal-cover {
+  color: #e8e0cc;
+  background: radial-gradient(circle at 50% 45%,rgba(220,174,69,.2),transparent 38%),linear-gradient(145deg,#30372a,#0c100c 80%);
+}
+.project-modal[data-project-theme="digital"] .tile-logo,
+.project-modal[data-project-theme="campaign"] .tile-logo { background:#171812; color:#f2e6c8; }
+.project-modal[data-project-theme="digital"] .tile-guidelines,
+.project-modal[data-project-theme="campaign"] .tile-guidelines { background:#cbb98e; color:#292317; }
+.project-modal[data-project-theme="logo"] .tile-packaging { background:linear-gradient(145deg,#3b3327,#16130f); }
+.project-modal[data-project-theme="packaging"] .tile-guidelines { background:#d8c8a5; color:#2d2b20; }
+
+.case-process {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0,1fr));
+  gap: 10px;
+  margin: 0 0 38px;
+}
+.case-step {
+  padding: 18px 16px;
+  border: 1px solid var(--line);
+  background: linear-gradient(145deg,rgba(220,174,69,.055),rgba(255,255,255,.012));
+}
+.case-step span {
+  display: block;
+  color: var(--gold);
+  font: 11px var(--display);
+  letter-spacing: 2px;
+  margin-bottom: 10px;
+}
+.case-step h4 { font: 600 15px var(--display); margin-bottom: 7px; }
+.case-step p { color: var(--muted); font-size: 11px; line-height: 1.7; }
+
+@media (max-width: 680px) {
+  .project-modal:not(.cinematic) .modal-panel { max-height: 72vh; }
+  .project-modal.cinematic .modal-inner { padding-top: 60px; }
+  .case-process { grid-template-columns: 1fr 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .modal-cover::after { animation: none; }
+  .project-modal.cinematic .modal-hero { animation: none; }
 }
 
 .modal-close {
@@ -1944,11 +2096,11 @@ footer {
             role="button"
             tabindex="0"
             aria-haspopup="dialog"
-            aria-label="Open Project 001: Brand Systems"
+            aria-label="Open Project 001: Brand Strategy"
             data-open-project="brand-system">
 
             <div class="project-top">
-              <small>PROJECT 001 · BRAND IDENTITY</small>
+              <small>PROJECT 001 · BRAND STRATEGY</small>
               <span class="project-open" aria-hidden="true">↗</span>
             </div>
 
@@ -1957,8 +2109,8 @@ footer {
             </div>
 
             <div class="project-bottom">
-              <h3>Brand Systems</h3>
-              <p>Identity · Guidelines · Assets</p>
+              <h3>Brand Strategy</h3>
+              <p>Positioning · Identity · Visual System</p>
               <div class="project-hint">Explore concept ↗</div>
             </div>
           </article>
@@ -1966,8 +2118,8 @@ footer {
           <article class="project reveal"
             role="button"
             tabindex="0"
-            aria-label="Project concept: Digital Experiences"
-            data-open-project="brand-system">
+            aria-haspopup="dialog" aria-label="Open Project 002: Digital Experiences"
+            data-open-project="digital-experience">
 
             <div class="project-top">
               <small>PROJECT 002 · DIGITAL</small>
@@ -1988,8 +2140,8 @@ footer {
           <article class="project reveal"
             role="button"
             tabindex="0"
-            aria-label="Project concept: Campaign Visuals"
-            data-open-project="brand-system">
+            aria-haspopup="dialog" aria-label="Open Project 003: Campaign Visuals"
+            data-open-project="campaign-visuals">
 
             <div class="project-top">
               <small>PROJECT 003 · CAMPAIGN</small>
@@ -2014,8 +2166,8 @@ footer {
           <article class="project reveal"
             role="button"
             tabindex="0"
-            aria-label="Project concept: Logo and Identity"
-            data-open-project="brand-system">
+            aria-haspopup="dialog" aria-label="Open Project 004: Logo and Identity"
+            data-open-project="logo-identity">
 
             <div class="project-top">
               <small>PROJECT 004 · LOGO DESIGN</small>
@@ -2036,8 +2188,8 @@ footer {
           <article class="project reveal"
             role="button"
             tabindex="0"
-            aria-label="Project concept: Packaging Design"
-            data-open-project="brand-system">
+            aria-haspopup="dialog" aria-label="Open Project 005: Packaging Design"
+            data-open-project="packaging-design">
 
             <div class="project-top">
               <small>PROJECT 005 · PACKAGING</small>
@@ -2237,61 +2389,53 @@ footer {
     <div class="modal-inner">
 
       <div class="modal-meta">
-        <span class="modal-label">APEXDESIGNZ · PROJECT 001</span>
-        <span class="modal-label">Brand Identity Concept</span>
+        <span class="modal-label" id="modalProjectNumber">APEXDESIGNZ · PROJECT 001</span>
+        <span class="modal-label" id="modalCategory">Brand Identity Concept</span>
       </div>
 
       <div class="modal-hero">
         <div>
           <div class="eyebrow">Selected Case Study</div>
           <h2 id="modalTitle">NŌRÉ <span>Skincare.</span></h2>
-          <p>
-            A premium skincare brand concept built around quiet luxury,
-            natural ingredients and thoughtful simplicity. The direction
-            combines refined typography, warm neutral tones and a consistent
-            visual system designed to feel calm, elevated and timeless.
-          </p>
+          <p id="modalIntro">A premium skincare brand concept built around quiet luxury, natural ingredients and thoughtful simplicity.</p>
         </div>
 
-        <div class="modal-cover" aria-label="NŌRÉ fictional skincare branding concept">
-          <div class="cover-top">BOTANICAL SKINCARE · EST. 2026</div>
+        <div class="modal-cover" id="modalCover" aria-label="Fictional branding concept cover">
+          <div class="cover-top" id="modalCoverTop">BOTANICAL SKINCARE · CONCEPT</div>
           <div class="cover-logo">
-            <strong>NŌRÉ</strong>
-            <span>SKINCARE RITUALS</span>
+            <strong id="modalCoverName">NŌRÉ</strong>
+            <span id="modalCoverTag">SKINCARE RITUALS</span>
           </div>
-          <div class="cover-bottom">LESS NOISE. MORE NATURE.</div>
+          <div class="cover-bottom" id="modalCoverBottom">LESS NOISE. MORE NATURE.</div>
         </div>
       </div>
 
       <div class="modal-info-grid">
         <div>
-          <h3 class="modal-subtitle">The Creative Direction</h3>
-          <p>
-            The concept explores a sophisticated skincare identity through
-            understated typography, tactile packaging, natural colour
-            inspiration and clear visual hierarchy. Each element is designed
-            to work together as one recognisable brand experience.
-          </p>
+          <h3 class="modal-subtitle" id="modalChallengeTitle">The Challenge</h3>
+          <p id="modalChallenge">Create a recognisable skincare identity that feels premium without becoming loud or overcomplicated.</p>
         </div>
 
         <div>
-          <h3 class="modal-subtitle">Project Scope</h3>
-          <p>A sample of the design services represented in this concept.</p>
-          <div class="modal-service-list">
-            <span>Logo Design</span>
-            <span>Brand Identity</span>
-            <span>Packaging</span>
-            <span>Typography</span>
-            <span>Colour System</span>
-            <span>Social Media</span>
+          <h3 class="modal-subtitle" id="modalStrategyTitle">Strategy & Execution</h3>
+          <p id="modalStrategy">We used restrained typography, a warm neutral palette and a consistent set of visual rules across each touchpoint.</p>
+          <div class="modal-service-list" id="modalServiceList">
+            <span>Logo Design</span><span>Brand Identity</span><span>Packaging</span><span>Typography</span><span>Colour System</span><span>Social Media</span>
           </div>
         </div>
       </div>
 
+      <div class="case-process" aria-label="How this concept was developed">
+        <article class="case-step"><span>01 / DISCOVER</span><h4>Understand</h4><p id="processDiscover">Define the audience, values and desired brand feeling.</p></article>
+        <article class="case-step"><span>02 / DEFINE</span><h4>Set direction</h4><p id="processDefine">Choose a focused concept, message and visual language.</p></article>
+        <article class="case-step"><span>03 / DESIGN</span><h4>Build system</h4><p id="processDesign">Develop the identity and adapt it across key touchpoints.</p></article>
+        <article class="case-step"><span>04 / DELIVER</span><h4>Refine</h4><p id="processDeliver">Check consistency and present a joined-up concept.</p></article>
+      </div>
+
       <div class="gallery-heading">
         <div>
-          <h3 class="modal-subtitle">The Brand System</h3>
-          <p>Explore the different visual elements of the concept.</p>
+          <h3 class="modal-subtitle" id="modalGalleryTitle">The Brand System</h3>
+          <p id="modalGalleryDescription">Explore the different visual elements of the concept.</p>
         </div>
         <span class="modal-label">CONCEPT PREVIEW</span>
       </div>
@@ -2299,33 +2443,33 @@ footer {
       <div class="brand-gallery">
 
         <article class="brand-tile tile-logo">
-          <small>01 / PRIMARY IDENTITY</small>
+          <small id="tile1Label">01 / PRIMARY IDENTITY</small>
           <div>
-            <div class="logo-design">N.</div>
-            <div class="logo-name">NŌRÉ</div>
-            <div class="logo-tag">SKINCARE RITUALS</div>
+            <div class="logo-design" id="tile1Mark">N.</div>
+            <div class="logo-name" id="tile1Name">NŌRÉ</div>
+            <div class="logo-tag" id="tile1Tag">SKINCARE RITUALS</div>
           </div>
-          <p>A considered wordmark and monogram designed to feel understated and premium.</p>
+          <p id="tile1Description">A considered wordmark and monogram designed to feel understated and premium.</p>
         </article>
 
         <article class="brand-tile tile-packaging">
-          <small>02 / PACKAGING DESIGN</small>
+          <small id="tile2Label">02 / PACKAGING DESIGN</small>
           <div class="bottle-stage" aria-hidden="true">
             <div class="bottle"></div>
             <div class="bottle"></div>
             <div class="bottle"></div>
           </div>
           <div>
-            <h4>Everyday Rituals</h4>
-            <p>Minimal packaging direction with warm, earthy tones.</p>
+            <h4 id="tile2Title">Everyday Rituals</h4>
+            <p id="tile2Description">Minimal packaging direction with warm, earthy tones.</p>
           </div>
         </article>
 
         <article class="brand-tile tile-guidelines">
-          <small>03 / BRAND GUIDELINES</small>
+          <small id="tile3Label">03 / BRAND GUIDELINES</small>
           <div>
-            <div class="guideline-type">Naturally<br>considered.</div>
-            <p>Soft neutrals, organic references and refined editorial typography.</p>
+            <div class="guideline-type" id="tile3Title">Naturally<br>considered.</div>
+            <p id="tile3Description">Soft neutrals, organic references and refined editorial typography.</p>
             <div class="swatches" aria-label="Sample brand colour palette">
               <span></span><span></span><span></span><span></span><span></span>
             </div>
@@ -2334,22 +2478,22 @@ footer {
         </article>
 
         <article class="brand-tile tile-social">
-          <small>04 / SOCIAL MEDIA DIRECTION</small>
+          <small id="tile4Label">04 / SOCIAL MEDIA DIRECTION</small>
           <div class="social-layout">
-            <div class="social-box">NŌRÉ<br><small>DAILY RITUAL</small></div>
-            <div class="social-box dark">PURE<br>BY NATURE</div>
-            <div class="social-box dark">LESS,<br>BUT BETTER.</div>
-            <div class="social-box">SKIN<br>ESSENTIALS</div>
+            <div class="social-box" id="social1">NŌRÉ<br><small>DAILY RITUAL</small></div>
+            <div class="social-box dark" id="social2">PURE<br>BY NATURE</div>
+            <div class="social-box dark" id="social3">LESS,<br>BUT BETTER.</div>
+            <div class="social-box" id="social4">SKIN<br>ESSENTIALS</div>
           </div>
-          <p>A cohesive content direction for a recognisable digital presence.</p>
+          <p id="tile4Description">A cohesive content direction for a recognisable digital presence.</p>
         </article>
 
       </div>
 
       <div class="modal-bottom">
         <div>
-          <strong>Have a brand idea of your own?</strong>
-          <p>Let's create a visual identity tailored to your business.</p>
+          <strong id="modalBottomTitle">Have a brand idea of your own?</strong>
+          <p id="modalBottomCopy">Let's create a visual identity tailored to your business.</p>
         </div>
 
         <a class="btn btn-solid"
@@ -2360,9 +2504,7 @@ footer {
       </div>
 
       <p style="margin-top:18px;color:#77776f;font-size:10px;line-height:1.7;">
-        Note: NŌRÉ is a fictional portfolio concept created to demonstrate
-        a possible brand direction. The visuals in this preview are
-        CSS-designed mockups, not photographs of a commissioned client project.
+        Note: These portfolio entries are illustrative concepts created to demonstrate possible creative directions. They are not presented as commissioned client case studies. The mockups are CSS-designed previews.
       </p>
 
     </div>
@@ -2414,56 +2556,197 @@ if ("IntersectionObserver" in window) {
   revealElements.forEach(element => element.classList.add("visible"));
 }
 
-/* PROJECT POPUP */
+/* HYBRID HOLOGRAPHIC PROJECT SHOWCASE */
 const projectModal = document.getElementById("projectModal");
 const closeModalButton = document.getElementById("closeModal");
 const projectCards = document.querySelectorAll("[data-open-project]");
-
+const modalPanel = projectModal.querySelector(".modal-panel");
 let previouslyFocusedElement = null;
+let showcaseTimer = null;
 
-function openProjectModal() {
-  previouslyFocusedElement = document.activeElement;
+const projectContent = {
+  "brand-system": {
+    number: "PROJECT 001 · BRAND STRATEGY", category: "Brand Strategy & Identity", theme: "brand",
+    title: "NŌRÉ", accent: "Skincare.", intro: "A premium skincare brand concept built around quiet luxury, natural ingredients and thoughtful simplicity. The direction combines refined typography, warm neutral tones and a consistent visual system.",
+    coverTop: "BOTANICAL SKINCARE · CONCEPT", coverName: "NŌRÉ", coverTag: "SKINCARE RITUALS", coverBottom: "LESS NOISE. MORE NATURE.",
+    challenge: "Create a recognisable skincare identity that feels premium without becoming loud or overcomplicated.", strategy: "We explored understated typography, tactile packaging, warm natural colours and a repeatable visual system that feels calm, elevated and timeless.",
+    services: ["Brand Strategy", "Logo Design", "Packaging", "Typography", "Colour System", "Social Media"],
+    discover: "Define the audience, values and quiet-luxury position.", define: "Build a warm, natural visual language with clear hierarchy.", design: "Develop the identity across packaging and digital touchpoints.", deliver: "Check consistency across the complete concept system.",
+    galleryTitle: "The NŌRÉ Brand System", galleryDescription: "Identity, packaging, colour and social direction working as one system.",
+    tile1Label: "01 / PRIMARY IDENTITY", mark: "N.", tile1Name: "NŌRÉ", tile1Tag: "SKINCARE RITUALS", tile1Description: "A restrained monogram and wordmark for a considered skincare range.",
+    tile2Label: "02 / PACKAGING DESIGN", tile2Title: "Everyday Rituals", tile2Description: "Warm neutral packaging with a tactile, understated shelf presence.",
+    tile3Label: "03 / BRAND GUIDELINES", tile3Title: "Naturally<br>considered.", tile3Description: "Soft neutrals, organic references and refined editorial typography.",
+    tile4Label: "04 / SOCIAL DIRECTION", social: ["NŌRÉ|DAILY RITUAL", "PURE|BY NATURE", "LESS,|BUT BETTER.", "SKIN|ESSENTIALS"], tile4Description: "A calm and consistent social content direction.",
+    bottomTitle: "Have a brand idea of your own?", bottomCopy: "Let's create a visual identity tailored to your business."
+  },
+  "digital-experience": {
+    number: "PROJECT 002 · DIGITAL", category: "Digital Experience Concept", theme: "digital",
+    title: "NŌRÉ", accent: "Online.", intro: "A concept for a refined skincare storefront, bringing product discovery, ingredient storytelling and a calm shopping journey into one responsive digital experience.",
+    coverTop: "DIGITAL STOREFRONT · CONCEPT", coverName: "NŌRÉ", coverTag: "A QUIETER ONLINE RITUAL", coverBottom: "DISCOVER. LEARN. CHOOSE.",
+    challenge: "Translate a minimal skincare identity into an online shop that feels intuitive, trustworthy and easy to explore on mobile and desktop.", strategy: "A clear page hierarchy, product-led layouts, editorial imagery zones and consistent typography connect the brand story to the shopping journey.",
+    services: ["UX Direction", "Web Design", "UI System", "Responsive Layout", "Product Pages", "Digital Branding"],
+    discover: "Map customer needs and key product questions.", define: "Prioritise navigation, product discovery and clarity.", design: "Shape responsive page layouts and reusable UI elements.", deliver: "Review the experience across desktop and mobile states.",
+    galleryTitle: "The Digital Experience", galleryDescription: "A concept system for storefront layouts, product pages and digital brand moments.",
+    tile1Label: "01 / DIGITAL WORDMARK", mark: "N.", tile1Name: "NŌRÉ WEB", tile1Tag: "DIGITAL STORE", tile1Description: "A clean brand header and type hierarchy for online browsing.",
+    tile2Label: "02 / PRODUCT EXPERIENCE", tile2Title: "Product, made clear", tile2Description: "A product presentation direction focused on essentials and easy scanning.",
+    tile3Label: "03 / UI FOUNDATIONS", tile3Title: "Less clutter.<br>More clarity.", tile3Description: "A restrained palette and consistent spacing for readable interfaces.",
+    tile4Label: "04 / DIGITAL CAMPAIGNS", social: ["NEW|ARRIVALS", "SKIN|ESSENTIALS", "OUR|INGREDIENTS", "SHOP|THE RITUAL"], tile4Description: "Reusable campaign tiles that carry the brand into social channels.",
+    bottomTitle: "Planning a better digital experience?", bottomCopy: "Let's shape a clear, responsive website around your brand."
+  },
+  "campaign-visuals": {
+    number: "PROJECT 003 · CAMPAIGN", category: "Campaign Art Direction Concept", theme: "campaign",
+    title: "LESS", accent: "But better.", intro: "A campaign visual direction built around one simple message: make fewer elements work harder. Bold typography and disciplined composition create a memorable advertising concept.",
+    coverTop: "CREATIVE CAMPAIGN · CONCEPT", coverName: "LESS.", coverTag: "A STUDY IN RESTRAINT", coverBottom: "LESS, BUT BETTER.",
+    challenge: "Make a short campaign message feel distinctive and memorable without relying on visual clutter or competing graphics.", strategy: "Use a strong headline, deliberate negative space, contrast and a limited palette so the message leads every execution.",
+    services: ["Art Direction", "Campaign Concept", "Poster Design", "Typography", "Ad Creatives", "Social Assets"],
+    discover: "Clarify the campaign message and intended audience.", define: "Choose one core line and a recognisable visual hook.", design: "Build poster and social variations around the same hierarchy.", deliver: "Keep all campaign formats visually consistent.",
+    galleryTitle: "Campaign Applications", galleryDescription: "A concept showing how the central message can extend across different formats.",
+    tile1Label: "01 / CAMPAIGN MARK", mark: "L.", tile1Name: "LESS.", tile1Tag: "BUT BETTER", tile1Description: "A concise typographic mark to anchor the campaign.",
+    tile2Label: "02 / POSTER DIRECTION", tile2Title: "The art of less", tile2Description: "High contrast, deliberate space and one clear message.",
+    tile3Label: "03 / TYPE SYSTEM", tile3Title: "Make space.<br>Make impact.", tile3Description: "A limited typographic system designed for quick recognition.",
+    tile4Label: "04 / SOCIAL ROLLOUT", social: ["LESS|NOISE", "MORE|FOCUS", "ONE|MESSAGE", "BETTER|DESIGN"], tile4Description: "Campaign lines adapted into a cohesive set of social tiles.",
+    bottomTitle: "Need a campaign with a clear point of view?", bottomCopy: "Let's turn your message into a distinctive visual campaign."
+  },
+  "logo-identity": {
+    number: "PROJECT 004 · LOGO DESIGN", category: "Logo & Identity Concept", theme: "logo",
+    title: "ARC", accent: "Studio.", intro: "A logo identity concept exploring balance, geometry and a confident, adaptable mark. The system is designed to remain legible across digital, print and small-format applications.",
+    coverTop: "VISUAL IDENTITY · CONCEPT", coverName: "ARC", coverTag: "DESIGN WITH INTENT", coverBottom: "FORM. BALANCE. CLARITY.",
+    challenge: "Create a compact identity that feels distinctive and professional while remaining flexible across different sizes and backgrounds.", strategy: "A geometric mark, considered spacing and a simple monochrome foundation provide a recognisable core that can be extended with supporting typography.",
+    services: ["Logo Design", "Monogram", "Typography", "Brand Rules", "Colour Palette", "Stationery"],
+    discover: "Identify the brand personality and practical use cases.", define: "Explore geometry, silhouette and wordmark balance.", design: "Refine the logo and build supporting identity elements.", deliver: "Check contrast, scale and consistency across applications.",
+    galleryTitle: "Identity Applications", galleryDescription: "The mark, supporting typography and example applications in one visual language.",
+    tile1Label: "01 / PRIMARY MARK", mark: "A.", tile1Name: "ARC STUDIO", tile1Tag: "DESIGN WITH INTENT", tile1Description: "A simple geometric signature with a strong silhouette.",
+    tile2Label: "02 / STATIONERY", tile2Title: "Identity in use", tile2Description: "A restrained stationery direction that keeps the mark in focus.",
+    tile3Label: "03 / TYPE & COLOUR", tile3Title: "Clear by<br>design.", tile3Description: "A flexible monochrome base with warm accent tones.",
+    tile4Label: "04 / BRAND TOUCHPOINTS", social: ["ARC|STUDIO", "BUILT|TO LAST", "FORM|FOLLOWS", "FUNCTION|FIRST"], tile4Description: "Short brand messages applied across digital touchpoints.",
+    bottomTitle: "Ready to give your brand a sharper identity?", bottomCopy: "Let's build a logo and visual system made for your business."
+  },
+  "packaging-design": {
+    number: "PROJECT 005 · PACKAGING", category: "Product & Packaging Concept", theme: "packaging",
+    title: "PURE", accent: "FORM.", intro: "A product packaging concept using confident type, earthy colour and a clean label system to give everyday products a cohesive, premium visual presence.",
+    coverTop: "PRODUCT PACKAGING · CONCEPT", coverName: "PURE FORM", coverTag: "ESSENTIALS, REFINED", coverBottom: "MADE TO FEEL SIMPLE.",
+    challenge: "Make a product range feel connected and easy to recognise while leaving room for different product types and label information.", strategy: "A shared label grid, a restrained colour family and clear type sizes create consistency while allowing each product variant to stand apart.",
+    services: ["Packaging Design", "Label System", "Product Naming", "Typography", "Colour Coding", "Mockups"],
+    discover: "Understand the product range and shelf context.", define: "Set a repeatable label grid and visual hierarchy.", design: "Create a family of pack directions with variant cues.", deliver: "Review legibility and consistency across the range.",
+    galleryTitle: "The Packaging System", galleryDescription: "A concept family showing labels, colour direction and product presentation.",
+    tile1Label: "01 / PRODUCT IDENTITY", mark: "P.", tile1Name: "PURE FORM", tile1Tag: "ESSENTIALS, REFINED", tile1Description: "A clean product signature designed to sit consistently across the range.",
+    tile2Label: "02 / PACKAGING RANGE", tile2Title: "A family of forms", tile2Description: "Coordinated pack shapes and label placement with subtle variation.",
+    tile3Label: "03 / LABEL SYSTEM", tile3Title: "Simple by<br>nature.", tile3Description: "A clear information hierarchy supported by earthy, premium colours.",
+    tile4Label: "04 / LAUNCH ASSETS", social: ["PURE|FORM", "DAILY|ESSENTIALS", "MADE|WITH CARE", "MEET|THE RANGE"], tile4Description: "Launch tiles that introduce the range while preserving the same visual language.",
+    bottomTitle: "Have a product ready for the shelf?", bottomCopy: "Let's create packaging that feels clear, cohesive and memorable."
+  }
+};
 
+function setText(id, value) {
+  const element = document.getElementById(id);
+  if (element && value !== undefined) element.textContent = value;
+}
+
+function setMarkup(id, value) {
+  const element = document.getElementById(id);
+  if (element && value !== undefined) element.innerHTML = value;
+}
+
+function populateProject(key) {
+  const data = projectContent[key] || projectContent["brand-system"];
+  projectModal.dataset.projectTheme = data.theme;
+  setText("modalProjectNumber", `APEXDESIGNZ · ${data.number}`);
+  setText("modalCategory", data.category);
+  setMarkup("modalTitle", `${data.title} <span>${data.accent}</span>`);
+  setText("modalIntro", data.intro);
+  setText("modalCoverTop", data.coverTop);
+  setText("modalCoverName", data.coverName);
+  setText("modalCoverTag", data.coverTag);
+  setText("modalCoverBottom", data.coverBottom);
+  setText("modalChallenge", data.challenge);
+  setText("modalStrategy", data.strategy);
+  setText("processDiscover", data.discover);
+  setText("processDefine", data.define);
+  setText("processDesign", data.design);
+  setText("processDeliver", data.deliver);
+  setText("modalGalleryTitle", data.galleryTitle);
+  setText("modalGalleryDescription", data.galleryDescription);
+  setText("tile1Label", data.tile1Label);
+  setText("tile1Mark", data.mark);
+  setText("tile1Name", data.tile1Name);
+  setText("tile1Tag", data.tile1Tag);
+  setText("tile1Description", data.tile1Description);
+  setText("tile2Label", data.tile2Label);
+  setText("tile2Title", data.tile2Title);
+  setText("tile2Description", data.tile2Description);
+  setMarkup("tile3Label", data.tile3Label);
+  setMarkup("tile3Title", data.tile3Title);
+  setText("tile3Description", data.tile3Description);
+  setText("tile4Label", data.tile4Label);
+  setText("tile4Description", data.tile4Description);
+  (data.social || []).forEach((item, index) => {
+    const [heading, subheading] = item.split("|");
+    const tile = document.getElementById(`social${index + 1}`);
+    if (tile) tile.innerHTML = `${heading}<br><small>${subheading}</small>`;
+  });
+  const serviceList = document.getElementById("modalServiceList");
+  if (serviceList) serviceList.replaceChildren(...data.services.map(service => {
+    const span = document.createElement("span");
+    span.textContent = service;
+    return span;
+  }));
+  setText("modalBottomTitle", data.bottomTitle);
+  setText("modalBottomCopy", data.bottomCopy);
+  const startLink = projectModal.querySelector(".modal-bottom a");
+  if (startLink) startLink.href = "https://wa.me/923134334123?text=" + encodeURIComponent(`Hi APEXDESIGNZ, I'd like to discuss a ${data.category.toLowerCase()} project.`);
+  const cover = document.getElementById("modalCover");
+  if (cover) cover.setAttribute("aria-label", `${data.coverName} fictional ${data.category.toLowerCase()} concept cover`);
+}
+
+function openProjectModal(event) {
+  const card = event.currentTarget;
+  previouslyFocusedElement = card;
+  clearTimeout(showcaseTimer);
+  populateProject(card.dataset.openProject);
+  projectModal.classList.remove("cinematic");
   projectModal.classList.add("open");
   projectModal.setAttribute("aria-hidden", "false");
   document.body.classList.add("modal-open");
+  modalPanel.scrollTop = 0;
+  closeModalButton.focus({ preventScroll: true });
 
-  closeModalButton.focus();
+  /* First show a floating holographic cover, then expand into the full case study. */
+  if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    showcaseTimer = setTimeout(() => {
+      if (projectModal.classList.contains("open")) projectModal.classList.add("cinematic");
+    }, 620);
+  } else {
+    projectModal.classList.add("cinematic");
+  }
 }
 
 function closeProjectModal() {
   if (!projectModal.classList.contains("open")) return;
-
-  projectModal.classList.remove("open");
+  clearTimeout(showcaseTimer);
+  projectModal.classList.remove("open", "cinematic");
   projectModal.setAttribute("aria-hidden", "true");
   document.body.classList.remove("modal-open");
-
   if (previouslyFocusedElement && typeof previouslyFocusedElement.focus === "function") {
-    previouslyFocusedElement.focus();
+    previouslyFocusedElement.focus({ preventScroll: true });
   }
 }
 
 projectCards.forEach(card => {
   card.addEventListener("click", openProjectModal);
-
   card.addEventListener("keydown", event => {
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
-      openProjectModal();
+      card.click();
     }
   });
 });
 
 closeModalButton.addEventListener("click", closeProjectModal);
-
 projectModal.querySelectorAll("[data-close-modal]").forEach(element => {
   element.addEventListener("click", closeProjectModal);
 });
-
 document.addEventListener("keydown", event => {
-  if (event.key === "Escape") {
-    closeProjectModal();
-  }
+  if (event.key === "Escape") closeProjectModal();
 });
 
 /* FOOTER YEAR */
